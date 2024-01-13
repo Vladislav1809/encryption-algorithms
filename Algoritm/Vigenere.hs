@@ -2,18 +2,22 @@ module Algoritm.Vigenere (encodeVigenere, decodeVigenere, algoritmVigenere) wher
 
 import Data.Char
 import Reader.ConsoleDataReader (readString)
-import Utils.Helper (uppercase)
+
+shiftChar :: Char -> Int -> Char
+shiftChar char shift =
+  if isLower char
+    then chr $ ((ord char - ord 'a' + shift) `mod` 26) + ord 'a'
+    else chr $ ((ord char - ord 'A' + shift) `mod` 26) + ord 'A'
 
 encodeVigenere :: String -> String -> String
 encodeVigenere key text =
-  let cycledKey = map ord (cycle key)
-      shift first second = chr $ mod (ord first - ord 'A' + second) 26 + ord 'A'
-   in zipWith shift text cycledKey
+  let cycledKey = cycle $ map (\c -> if isLower c then ord c - ord 'a' else ord c - ord 'A') key
+   in zipWith shiftChar text cycledKey
 
 decodeVigenere :: String -> String -> String
 decodeVigenere key text =
-  let cycledKey = map ord (cycle key)
-      unshift first second = chr $ mod (ord first - ord 'A' - second) 26 + ord 'A'
+  let cycledKey = cycle $ map (\c -> if isLower c then ord c - ord 'a' else ord c - ord 'A') key
+      unshift c k = shiftChar c (-k)
    in zipWith unshift text cycledKey
 
 algoritmVigenere :: IO ()
@@ -23,8 +27,8 @@ algoritmVigenere = do
   putStr "Your text: "
   text <- readString
 
-  let result = encodeVigenere (uppercase key) (uppercase text)
+  let result = encodeVigenere key text
   putStr "Encoded: "
   print result
   putStr "Decoded: "
-  print $ decodeVigenere (uppercase key) result
+  print $ decodeVigenere key result
