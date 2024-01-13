@@ -1,7 +1,8 @@
 module Algoritm.Vigenere (encodeVigenere, decodeVigenere, algoritmVigenere) where
 
 import Data.Char
-import Reader.DataReader (readString)
+import Reader.ConsoleDataReader (readString)
+import Utils.Helper (uppercase)
 
 encodeVigenere :: String -> String -> String
 encodeVigenere key text =
@@ -22,8 +23,8 @@ algoritmVigenere = do
   putStr "Your text: "
   text <- readString
 
-  let result = encodeVigenere key text
+  let result = encodeVigenere (uppercase key) (uppercase text)
   putStr "Encoded: "
   print result
   putStr "Decoded: "
-  print $ decodeVigenere key result
+  print $ decodeVigenere (uppercase key) result

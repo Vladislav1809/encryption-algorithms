@@ -1,7 +1,8 @@
 module Algoritm.Caesar (encodeCaesar, decodeCaesar, algoritmCaesar) where 
 
 import Data.Char
-import Reader.DataReader (readInt, readString)
+import Reader.ConsoleDataReader (readInt, readString)
+import Utils.Helper (uppercase)
 
 encodeCaesar :: Int -> String -> String
 encodeCaesar offset = map (\letter -> chr $ ord letter + offset)
@@ -16,7 +17,7 @@ algoritmCaesar = do
     putStr "Your text: "
     text <- readString
 
-    let result =  encodeCaesar offset text
+    let result =  encodeCaesar offset (uppercase text)
     putStr "Encoded: "
     print result 
     putStr "Decoded: "
